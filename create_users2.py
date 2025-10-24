@@ -21,77 +21,117 @@ def main():
 
     if ans == "N":
         for line in sys.stdin:
-            # This checks if the line starts with a '#' to skip comment lines.
-            match = re.match("^#", line)
 
-            # Split line into fields using ':' as the delimiter.
-            fields = line.strip().split(':')
+        # This is scanning through the text to find a hashtag to see if its a comment. It is looking for a hashtag to discard creating them as a user.
+        match = re.match("^#", line)
 
-            # If it's a comment line or the line doesn't have 5 fields, skip it.
-            if match or len(fields) != 5:
-                continue
+        # Split will create an array and split each string that has a colon in front of it and store that string as an element in the array. The array will be stored in the fields variable.
+        fields = line.strip().split(':')
 
-            # Extract user info from fields.
-            username = fields[0]
-            password = fields[1]
-            gecos = "%s %s,,," % (fields[3], fields[2])
+        # The IF statement is checking for two things to be true.
+        # 1. That match has a value, which would be "#".
+        # 2. Or IF the length of the array is not 5.
+        # If either of the two is true, then it will hit the continue line, and skip this iteration.
+        # If neither is true, then it is a valid input line and will create the user.
+        if match or len(fields) != 5:
+            continue
 
-            # Split groups into a list.
-            groups = fields[4].split(',')
+        # Stores the first and seconds element of fields array into username and password. This will store the full and last name.
+        username = fields[0]
+        password = fields[1]
+        gecos = "%s %s,,," % (fields[3], fields[2])
+        # This will split strings from the commas and store those strings as elements in an array stored by groups.
+        groups = fields[4].split(',')
 
-            # Show account creation message.
-            print(f"==> Creating account for {username}...")
+        # The print statement shows the creation of the user and that it is working.
+        print("==> Creating account for %s..." % (username))
 
-            # Build and run adduser command.
-            cmd = f"/usr/sbin/adduser --disabled-password --gecos '{gecos}' {username}"
-            os.system(cmd)
+        # This will store the command that will be used to add a user.
+        cmd = "/usr/sbin/adduser --disabled-password --gecos '%s' %s" % (gecos, username)
 
-            # Show password message and set password.
-            print(f"==> Setting the password for {username}...")
-            cmd = f"/bin/echo -ne '{password}\n{password}' | /usr/bin/sudo /usr/bin/passwd {username}"
-            os.system(cmd)
+        # It should be commnted out the first time to dry-run the code.
+        # Runs command to create the user
+        os.system(cmd)
 
-            # Add user to groups if not '-'.
-            for group in groups:
-                if group != '-':
-                    print(f"==> Assigning {username} to the {group} group...")
-                    cmd = f"/usr/sbin/adduser {username} {group}"
-                    os.system(cmd)
+        # Print message about setting the user password
+        print("==> Setting the password for %s..." % (username))
+
+        # Stores Linux command to create user password.
+        cmd = "/bin/echo -ne '%s\n%s' | /usr/bin/sudo /usr/bin/passwd %s" % (password, password, username)
+
+        # The first time should be commneted out.
+        # Command would set the password.
+        os.system(cmd)
+
+        for group in groups:
+            # Checks if the current string being checked is not a dash.
+            # If it does, then it is empty and it will skip.
+            # If this does not have a dash, then there are groups for users to be added to.
+            if group != '-':
+                print("==> Assigning %s to the %s group..." % (username, group))
+                cmd = "/usr/sbin/adduser %s %s" % (username, group)
+                #print cmd
+                os.system(cmd)
 
     elif ans == "Y":
         for line in sys.stdin:
-            # Dry-run mode: print what would be done instead of executing it.
-            match = re.match("^#", line)
-            print(match)
 
-            fields = line.strip().split(':')
-            print(fields)
+        # This is scanning through the text to find a hashtag to see if its a comment. It is looking for a hashtag to discard creating them as a user.
+        match = re.match("^#", line)
+        print(match)
 
-            if match or len(fields) != 5:
-                continue
+        # Split will create an array and split each string that has a colon in front of it and store that string as an element in the array. The array will be stored in the fields variable.
+        fields = line.strip().split(':')
+        print(fields)
 
-            username = fields[0]
-            password = fields[1]
-            print(username, " ", password)
-            gecos = "%s %s,,," % (fields[3], fields[2])
-            print(gecos)
+        # The IF statement is checking for two things to be true.
+        # 1. That match has a value, which would be "#".
+        # 2. Or IF the length of the array is not 5.
+        # If either of the two is true, then it will hit the continue line, and skip this iteration.
+        # If neither is true, then it is a valid input line and will create the user.
+        if match or len(fields) != 5:
+            continue
 
-            groups = fields[4].split(',')
-            print(groups)
+        # Stores the first and seconds element of fields array into username and password. This will store the full and last name.
+        username = fields[0]
+        password = fields[1]
+        print(username, " ", password)
+        gecos = "%s %s,,," % (fields[3], fields[2])
+        print(gecos)
 
-            print(f"==> Creating account for {username}...")
-            cmd = f"/usr/sbin/adduser --disabled-password --gecos '{gecos}' {username}"
-            # os.system(cmd)  # Commented out for dry-run
+        # This will split strings from the commas and store those strings as elements in an array stored by groups.
+        groups = fields[4].split(',')
+        print(groups)
 
-            print(f"==> Setting the password for {username}...")
-            cmd = f"/bin/echo -ne '{password}\n{password}' | /usr/bin/sudo /usr/bin/passwd {username}"
-            # os.system(cmd)  # Commented out for dry-run
+        # The print statement shows the creation of the user and that it is working.
+        print("==> Creating account for %s..." % (username))
 
-            for group in groups:
-                if group != '-':
-                    print(f"==> Assigning {username} to the {group} group...")
-                    cmd = f"/usr/sbin/adduser {username} {group}"
-                    # os.system(cmd)
+        # This will store the command that will be used to add a user.
+        cmd = "/usr/sbin/adduser --disabled-password --gecos '%s' %s" % (gecos, username)
+
+        # It should be commnted out the first time to dry-run the code.
+        # Runs command to create the user
+        #os.system(cmd)
+
+        # Print message about setting the user password
+        print("==> Setting the password for %s..." % (username))
+
+        # Stores Linux command to create user password.
+        cmd = "/bin/echo -ne '%s\n%s' | /usr/bin/sudo /usr/bin/passwd %s" % (password, password, username)
+
+        # The first time should be commneted out.
+        # Command would set the password.
+        #os.system(cmd)
+
+        for group in groups:
+            # Checks if the current string being checked is not a dash.
+            # If it does, then it is empty and it will skip.
+            # If this does not have a dash, then there are groups for users to be added to.
+            if group != '-':
+                print("==> Assigning %s to the %s group..." % (username, group))
+                cmd = "/usr/sbin/adduser %s %s" % (username, group)
+                #print cmd
+                #os.system(cmd)
 
     print()
     print()
