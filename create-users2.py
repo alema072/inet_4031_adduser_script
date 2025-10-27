@@ -18,7 +18,7 @@ import sys
 def main():
 
     # Here it is asking the user for an input for whether they want to run in dry-run mode or not.
-    # Choosing 'N' will actually create the users since the 'os.system' lines are uncommented.
+    # Choosing 'N' will actually create the users since the 'os.system' lines are uncommented
     # Choosing 'Y' will run it in dry-run mode as a test if the users would actually be created. 
     ans = input("Would you like to run the code in dry-run mode? (Y/N): ")
 
