@@ -18,7 +18,7 @@ import sys
 def main():
     for line in sys.stdin:
 
-        # This is scanning through the text to find a hashtag to see if its a comment. It is looking for a hashtag to discard creating them as a user.
+        # This is scanning through the text to find a hashtag to see if its a comment. It is looking for a hashtag to discard creating them as a user
         match = re.match("^#", line)
         #print(match)
 
